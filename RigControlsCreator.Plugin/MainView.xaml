@@ -1,0 +1,54 @@
+﻿<Window x:Class="RigControlsCreator.Plugin.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RigControlsCreator.Plugin"
+        mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance Type=local:MainViewModel, IsDesignTimeCreatable=True}"
+        Title="Rig Controls Creator"
+		MinWidth="570"
+		Width="600"
+		MinHeight="330"
+		Height="400"
+		Background ="{DynamicResource WindowBrush}" Topmost="True">
+
+	<Window.Resources>
+		<BitmapImage x:Key="MissingImage" UriSource="missing.png"/>
+	</Window.Resources>
+
+	<Grid Margin="10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<ComboBox Grid.Row="0" Grid.ColumnSpan="4" Margin="0 0 0 10" ItemsSource="{Binding Controls}" DisplayMemberPath="Name" SelectedItem="{Binding CurrentControl, Mode=OneWayToSource}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
+
+		<Button Margin="0 0 5 10" Grid.Row="1" Grid.Column="0" Content="Remove control" Command="{Binding RemoveControlCommand}"/>
+		<Button Margin="5 0 5 10" Grid.Row="1" Grid.Column="1" Content="Add new control" Command="{Binding AddControlCommand}"/>
+		<Button Margin="5 0 0 10" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Content="Save changes" Command="{Binding SaveChangesCommand}"/>
+		<StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.Column="0" Margin="0 0 5 10" VerticalAlignment="Center" UseLayoutRounding="True">
+			<Image Margin="0 0 0 10"  Source="{Binding CurrentControl.Image, Mode=TwoWay, FallbackValue={StaticResource MissingImage}, TargetNullValue={StaticResource MissingImage}}" SnapsToDevicePixels="True" Stretch="UniformToFill" Width="128" Height="128" AllowDrop="True" Drop="Image_OnDrop"/>
+			<DockPanel Margin="0 0 4 10" UseLayoutRounding="False">
+				<Label Content="Name:" VerticalContentAlignment="Center"/>
+				<TextBox Text="{Binding CurrentControl.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</DockPanel>
+		</StackPanel>
+		<GroupBox Margin="5 0 0 10" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2" Header="Curve script:">
+			<TextBox Height="Auto" AcceptsReturn="True" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding CurrentControl.Script, Mode=TwoWay}"/>
+		</GroupBox>
+
+		<Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Content="Place on scene" Command="{Binding PlaceOnSceneCommand}"/>
+	</Grid>
+</Window>
